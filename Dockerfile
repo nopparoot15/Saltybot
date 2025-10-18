@@ -15,4 +15,4 @@ COPY . .
 # ENV DISCORD_BOT_TOKEN=your_token_here  ← แนะนำให้ใช้ผ่าน Railway หรือ .env แทน
 
 # ✅ Run bot
-CMD ["python", "bot.py"]
+CMD ["python", "-m", "saltybot.app"]
