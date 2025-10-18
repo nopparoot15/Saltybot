@@ -2,7 +2,14 @@ FROM python:3.11-slim
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    TZ=Asia/Bangkok
+
+# ติดตั้ง tzdata ให้เวลาเป็น Asia/Bangkok
+RUN apt-get update && apt-get install -y --no-install-recommends tzdata \
+    && ln -fs /usr/share/zoneinfo/$TZ /etc/localtime \
+    && dpkg-reconfigure -f noninteractive tzdata \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -14,7 +21,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY saltybot/ saltybot/
 COPY migrations/ migrations/
 
-# รันบอท (คุณใช้ run_with_migration ก็ได้ ถ้ามีไฟล์)
+# สร้าง user ไม่รันเป็น root (ปลอดภัยขึ้น)
+RUN useradd -m botuser && chown -R botuser:botuser /app
+USER botuser
+
+# HEALTHCHECK (optional)
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s CMD python -c "import socket,sys; sys.exit(0)"
+
+# สตาร์ท: migrate แล้วรันบอท (ไฟล์ที่เพิ่ม)
 CMD ["python", "-m", "saltybot.run_with_migration"]
-# หรือถ้าไม่มีไฟล์นั้น:
-# CMD ["python", "-m", "saltybot.app"]
