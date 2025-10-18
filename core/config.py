@@ -1,0 +1,53 @@
+from datetime import timezone, timedelta
+import os
+
+# ---------- IDs (use env with defaults so repo runs locally) ----------
+VERIFY_CHANNEL_ID = int(os.getenv("VERIFY_CHANNEL_ID", "1402889712888447037"))
+APPROVAL_CHANNEL_ID = int(os.getenv("APPROVAL_CHANNEL_ID", "1402889786712395859"))
+LOG_CHANNEL_ID = int(os.getenv("LOG_CHANNEL_ID", "1418941833819590699"))
+ADMIN_NOTIFY_CHANNEL_ID = int(os.getenv("ADMIN_NOTIFY_CHANNEL_ID", str(LOG_CHANNEL_ID)))
+
+ROLE_ID_TO_GIVE = int(os.getenv("ROLE_ID_TO_GIVE", "1321268883088211981"))
+ROLE_MALE = int(os.getenv("ROLE_MALE", "1321268883025559689"))
+ROLE_FEMALE = int(os.getenv("ROLE_FEMALE", "1321268883025559688"))
+ROLE_LGBT = int(os.getenv("ROLE_LGBT", "1321268883025559687"))
+ROLE_GENDER_UNDISCLOSED = int(os.getenv("ROLE_GENDER_UNDISCLOSED", "1419046348023398421"))
+
+# --- Age roles ---
+ROLE_0_12   = int(os.getenv("ROLE_0_12", "1402907371696558131"))
+ROLE_13_15  = int(os.getenv("ROLE_13_15", "1344232758129594379"))
+ROLE_16_18  = int(os.getenv("ROLE_16_18", "1344232891093090377"))
+ROLE_19_21  = int(os.getenv("ROLE_19_21", "1344232979647565924"))
+ROLE_22_24  = int(os.getenv("ROLE_22_24", "1344233048593403955"))
+ROLE_25_29  = int(os.getenv("ROLE_25_29", "1418703710137094357"))
+ROLE_30_34  = int(os.getenv("ROLE_30_34", "1418703702843457576"))
+ROLE_35_39  = int(os.getenv("ROLE_35_39", "1418703707100545075"))
+ROLE_40_44  = int(os.getenv("ROLE_40_44", "1418703944711929917"))
+ROLE_45_49  = int(os.getenv("ROLE_45_49", "1418703955176718396"))
+ROLE_50_54  = int(os.getenv("ROLE_50_54", "1418704062592843948"))
+ROLE_55_59  = int(os.getenv("ROLE_55_59", "1418704067194261615"))
+ROLE_60_64  = int(os.getenv("ROLE_60_64", "1418704072617496666"))
+ROLE_65_UP  = int(os.getenv("ROLE_65_UP", "1418704076119736390"))
+ROLE_AGE_UNDISCLOSED = int(os.getenv("ROLE_AGE_UNDISCLOSED", "1419045340576747663"))
+
+# ---------- Flags ----------
+APPEND_FORM_NAME_TO_NICK = os.getenv("APPEND_FORM_NAME_TO_NICK", "false").lower() == "true"
+
+ACCOUNT_RISK_ENABLED = os.getenv("ACCOUNT_RISK_ENABLED", "true").lower() == "true"
+MIN_ACCOUNT_AGE_DAYS_HIGH = int(os.getenv("MIN_ACCOUNT_AGE_DAYS_HIGH", "3"))
+MIN_ACCOUNT_AGE_DAYS_MED = int(os.getenv("MIN_ACCOUNT_AGE_DAYS_MED", "7"))
+
+# Birthday / privacy
+HIDE_BIRTHDAY_ON_IDCARD = os.getenv("HIDE_BIRTHDAY_ON_IDCARD", "true").lower() == "true"
+BIRTHDAY_HIDDEN_TEXT = os.getenv("BIRTHDAY_HIDDEN_TEXT", "ไม่แสดง")
+
+# Timezone
+TH_TZ = timezone(timedelta(hours=7))  # Asia/Bangkok
+
+# Grouped sets
+GENDER_ROLE_IDS_ALL = [ROLE_MALE, ROLE_FEMALE, ROLE_LGBT, ROLE_GENDER_UNDISCLOSED]
+AGE_ROLE_IDS_ALL = [
+    ROLE_0_12, ROLE_13_15, ROLE_16_18, ROLE_19_21, ROLE_22_24,
+    ROLE_25_29, ROLE_30_34, ROLE_35_39, ROLE_40_44, ROLE_45_49,
+    ROLE_50_54, ROLE_55_59, ROLE_60_64, ROLE_65_UP, ROLE_AGE_UNDISCLOSED
+]
