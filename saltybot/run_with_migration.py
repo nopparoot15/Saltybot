@@ -1,31 +1,28 @@
-import os, asyncio, pathlib, sys
-import asyncpg
+# saltybot/run_with_migration.py
+import os, asyncio, asyncpg, pathlib, sys
 
 SQL_PATH = pathlib.Path(__file__).resolve().parents[1] / "migrations" / "0001_init.sql"
-
-async def _run_migration(dsn: str):
-    sql = SQL_PATH.read_text("utf-8")
-    conn = await asyncpg.connect(dsn)
-    try:
-        await conn.execute(sql)
-    finally:
-        await conn.close()
 
 async def main():
     dsn = os.getenv("DATABASE_URL")
     if not dsn:
-        print("DATABASE_URL not set", file=sys.stderr)
-        sys.exit(1)
-    if not SQL_PATH.exists():
-        print(f"Migration file not found: {SQL_PATH}", file=sys.stderr)
+        print("❌ DATABASE_URL not set", file=sys.stderr)
         sys.exit(1)
 
-    # run migration (idempotent SQL ช่วยให้รันซ้ำได้)
-    await _run_migration(dsn)
+    if SQL_PATH.exists():
+        sql = SQL_PATH.read_text("utf-8")
+        conn = await asyncpg.connect(dsn)
+        try:
+            await conn.execute(sql)
+            print("✅ Migration applied successfully")
+        finally:
+            await conn.close()
+    else:
+        print(f"⚠️ Migration file not found: {SQL_PATH}")
 
-    # start bot
-    from saltybot.app import main as start_bot
-    await start_bot()
+    # เรียก app._runner() โดยตรงแทน main()
+    from saltybot.app import _runner
+    await _runner()
 
 if __name__ == "__main__":
     asyncio.run(main())
