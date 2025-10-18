@@ -1,18 +1,19 @@
-# ✅ Base image
+# Dockerfile (เร็วและเล็ก)
 FROM python:3.11-slim
 
-# ✅ Set work directory
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
 WORKDIR /app
 
-# ✅ Install dependencies
+# แยกชั้น requirements ให้ cache ได้
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# ✅ Copy source code
-COPY . .
+# ค่อยคัดโค้ดจริง
+COPY saltybot/ saltybot/
+COPY migrations/ migrations/
 
-# ✅ Set environment variables (optional)
-# ENV DISCORD_BOT_TOKEN=your_token_here  ← แนะนำให้ใช้ผ่าน Railway หรือ .env แทน
-
-# ✅ Run bot
+# ไม่ต้องติดตั้ง psql ถ้า migration ทำในโค้ด
 CMD ["python", "-m", "saltybot.app"]
